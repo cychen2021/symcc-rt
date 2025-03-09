@@ -462,8 +462,13 @@ void _sym_push_path_constraint(const char *function_name, Z3_ast constraint, int
 
   Z3_solver_push(g_context, g_solver);
   Z3_solver_assert(g_context, g_solver, taken ? not_constraint : constraint);
-  fprintf(g_log, "Trying to solve in function %s:\n%s\n",
-          function_name, Z3_solver_to_string(g_context, g_solver));
+  if (function_name != nullptr) {
+    fprintf(g_log, "Trying to solve in function %s:\n%s\n",
+            function_name, Z3_solver_to_string(g_context, g_solver));
+  } else {
+    fprintf(g_log, "Trying to solve:\n%s\n",
+            Z3_solver_to_string(g_context, g_solver));
+  }
 
   Z3_lbool feasible = Z3_solver_check(g_context, g_solver);
   if (feasible == Z3_L_TRUE) {

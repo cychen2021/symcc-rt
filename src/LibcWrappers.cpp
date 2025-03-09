@@ -63,7 +63,7 @@ template <typename V, typename F>
 void tryAlternative(V value, SymExpr valueExpr, F caller) {
   if (valueExpr) {
     _sym_push_path_constraint(
-      "TODO",
+      nullptr,
         _sym_build_equal(valueExpr,
                          _sym_build_integer(value, sizeof(value) * 8)),
         true, reinterpret_cast<uintptr_t>(caller));
@@ -517,7 +517,7 @@ const char *SYM(strchr)(const char *s, int c) {
   auto shadowIt = shadow.begin();
   for (size_t i = 0; i < length; i++) {
     _sym_push_path_constraint(
-      "TODO",
+        nullptr,
         _sym_build_not_equal(
             (*shadowIt != nullptr) ? *shadowIt : _sym_build_integer(s[i], 8),
             cExpr),
@@ -549,7 +549,7 @@ int SYM(memcmp)(const void *a, const void *b, size_t n) {
         _sym_build_bool_and(allEqual, _sym_build_equal(*aShadowIt, *bShadowIt));
   }
 
-  _sym_push_path_constraint("TODO", allEqual, result == 0,
+  _sym_push_path_constraint(nullptr, allEqual, result == 0,
                             reinterpret_cast<uintptr_t>(SYM(memcmp)));
   return result;
 }
@@ -586,7 +586,7 @@ int SYM(bcmp)(const void *a, const void *b, size_t n) {
         _sym_build_bool_and(allEqual, _sym_build_equal(*aShadowIt, *bShadowIt));
   }
 
-  _sym_push_path_constraint("TODO", allEqual, result == 0,
+  _sym_push_path_constraint(nullptr, allEqual, result == 0,
                             reinterpret_cast<uintptr_t>(SYM(bcmp)));
   return result;
 }
