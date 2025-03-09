@@ -178,7 +178,7 @@ SymExpr _sym_get_return_expression(void);
 /*
  * Constraint handling
  */
-void _sym_push_path_constraint(nullable SymExpr constraint, int taken,
+void _sym_push_path_constraint(const char *function_name, nullable SymExpr constraint, int taken,
                                uintptr_t site_id);
 SymExpr _sym_get_input_byte(size_t offset, uint8_t concrete_value);
 void _sym_make_symbolic(const void *data, size_t byte_length,
@@ -211,6 +211,8 @@ void _sym_notify_basic_block(uintptr_t site_id);
  */
 const char *_sym_expr_to_string(SymExpr expr); // statically allocated
 bool _sym_feasible(SymExpr expr);
+
+void _sym_log_function_info(const char *function_name, SymExpr return_expr);
 
 /*
  * Garbage collection

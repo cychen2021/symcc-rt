@@ -431,7 +431,7 @@ Z3_ast _sym_build_bool_to_bit(Z3_ast expr) {
                         _sym_build_integer(0, 1));
 }
 
-void _sym_push_path_constraint(Z3_ast constraint, int taken,
+void _sym_push_path_constraint(const char *function_name, Z3_ast constraint, int taken,
                                uintptr_t site_id [[maybe_unused]]) {
   if (constraint == nullptr)
     return;
@@ -462,8 +462,8 @@ void _sym_push_path_constraint(Z3_ast constraint, int taken,
 
   Z3_solver_push(g_context, g_solver);
   Z3_solver_assert(g_context, g_solver, taken ? not_constraint : constraint);
-  fprintf(g_log, "Trying to solve:\n%s\n",
-          Z3_solver_to_string(g_context, g_solver));
+  fprintf(g_log, "Trying to solve in function %s:\n%s\n",
+          function_name, Z3_solver_to_string(g_context, g_solver));
 
   Z3_lbool feasible = Z3_solver_check(g_context, g_solver);
   if (feasible == Z3_L_TRUE) {
@@ -527,6 +527,10 @@ bool _sym_feasible(SymExpr expr) {
 
   Z3_dec_ref(g_context, expr);
   return (feasible == Z3_L_TRUE);
+}
+
+void _sym_log_function_info(const char *function_name, SymExpr return_expr) {
+  fprintf(g_log, "Function %s returns:\n    %s\n", function_name, _sym_expr_to_string(return_expr));
 }
 
 /* Garbage collection */
